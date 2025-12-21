@@ -6,7 +6,7 @@ print(training_pipeline.PIPELINE_NAME)
 print(training_pipeline.ARTIFACT_DIR)
 
 class TrainingPipelineConfig:
-    def __init__(self,timestamp = datetime.show()):
+    def __init__(self,timestamp = datetime.now()):
         timestamp = timestamp.strftime("%M_%D_%Y_%H_%M_%S")
         self.pipleine_name = training_pipeline.PIPELINE_NAME
         self.artifact_name = training_pipeline.ARTIFACT_DIR
@@ -25,7 +25,7 @@ class DataIngestionConfig:
                 self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, training_pipeline.TRAIN_FILE_NAME
             )
         self.testing_file_path: str = os.path.join(
-                self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, training_pipeline.TEST_FILE_NAME
+                self.data_ingestion_dir, training_pipeline.DATA_INGESTION_INGESTED_DIR, training_pipeline.TEST_SPLIT_NAME
             )
         self.train_test_split_ratio: float = training_pipeline.DATA_INGESTION_TRAIN_TEST_SPLIT_RATION
         self.collection_name: str = training_pipeline.DATA_INGESTION_COLLECTION_NAME

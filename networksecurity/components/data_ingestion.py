@@ -27,12 +27,12 @@ class DataIngestion:
     def export_collection_as_dataframe(self):
         # read data frame from mongodb 
         try:
-            database_name = self.data_ingestion_congig.database_name
+            database_name = self.data_ingestion_config.database_name
             collection_name = self.data_ingestion_config.collection_name
-            self.mongo_client  = pymongo.mongo_client(MONGO_DB_URL)
+            self.mongo_client  = pymongo.MongoClient(MONGO_DB_URL)
             collection = self.mongo_client[database_name][collection_name]
 
-            df = pd.DataFrame(list(collection.tofind()))
+            df = pd.DataFrame(list(collection.find()))
             if "_id" in df.columns.to_list():
                 df = df.drop(columns = ["_id"],axis =1)
 
@@ -90,7 +90,7 @@ class DataIngestion:
             dataframe = self.export_collection_as_dataframe()
             dataframe = self.export_data_into_feature_store(dataframe)
             self.split_data_as_train_test(dataframe)
-            dataingestionartifact = dataIngestionartifact(trained_file_path = self.data_ingestion_config.training_file_path,
+            dataingestionartifact = DataIngestionArtifact(trained_file_path = self.data_ingestion_config.training_file_path,
                                                           test_file_path = self.data_ingestion_config.testing_file_path)
             return dataingestionartifact
         except Exception as e:

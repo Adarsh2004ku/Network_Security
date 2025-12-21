@@ -9,12 +9,12 @@ import sys
 
 if __name__=='__main__':
     try:
-        TrainingPipelineConfig = TrainingPipelineConfig()
-        data_ingestion = DataIngestion()
-        data_ingestion =data_ingestion(data_ingestion)
-        logging.info("Initiate the data Ingestion")
-        datingestionartifact = data_ingestion.initiate_data_ingestion()
-        print(datingestionartifact)
+        training_pipeline_config = TrainingPipelineConfig()
+        data_ingestion_config = DataIngestionConfig(training_pipeline_config)
+        data_ingestion = DataIngestion(data_ingestion_config)
+        logger.info("Initiate the data Ingestion")
+        dataingestionartifact = data_ingestion.initiate_data_ingestion()
+        print(dataingestionartifact)
 
 
     except Exception as e:
