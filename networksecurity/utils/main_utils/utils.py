@@ -2,9 +2,12 @@ import yaml
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 import os,sys
-import dill
-import pickle
 import numpy as np
+#import dill
+import pickle
+
+from sklearn.metrics import r2_score
+from sklearn.model_selection import GridSearchCV
 
 def read_yaml_file(file_path: str) -> dict:
     try:
@@ -13,8 +16,6 @@ def read_yaml_file(file_path: str) -> dict:
     except Exception as e:
         raise NetworkSecurityException(e, sys) from e
     
-
-
 def write_yaml_file(file_path: str, content: object, replace: bool = False) -> None:
     try:
         if replace:
