@@ -1,106 +1,99 @@
-# 🔐 Network Security - ML-Based Threat Detection System
+# Network Security
 
-![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
-![Machine Learning](https://img.shields.io/badge/ML-Anomaly%20Detection-green)
-![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED)
-![MongoDB](https://img.shields.io/badge/Database-MongoDB-47A248)
-![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF)
+A machine learning-based network security system for detecting anomalies and threats in network traffic data. This project implements a complete MLOps pipeline from data ingestion to model deployment using MongoDB for data storage and Docker for containerization.
 
-A comprehensive machine learning-based network security system designed to detect anomalies, classify threats, and monitor network traffic in real-time. Built with modern MLOps practices, this project provides an end-to-end solution for network security monitoring and threat detection.
+## Table of Contents
 
----
-
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Usage](#-usage)
-- [Project Structure](#-project-structure)
-- [Model Training](#-model-training)
-- [API Documentation](#-api-documentation)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Contact](#-contact)
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [Components](#components)
+- [Contributing](#contributing)
 
 ---
 
-## ✨ Features
+## Overview
 
-### Core Capabilities
-- 🎯 **Anomaly Detection**: Real-time identification of abnormal network behavior
-- 🔍 **Threat Classification**: Multi-class classification of security threats
-- 📊 **Data Pipeline**: Automated data ingestion and preprocessing
-- 🤖 **ML Models**: Production-ready machine learning models
-- 📈 **Model Versioning**: Track and manage different model versions
-- 🔄 **CI/CD Integration**: Automated testing and deployment workflows
+This project provides an end-to-end solution for network security monitoring using machine learning. It processes network traffic data, trains models to detect anomalies, and provides predictions on potential security threats.
 
-### Technical Features
-- 🐳 **Docker Support**: Containerized deployment for consistency
-- 🗄️ **MongoDB Integration**: Scalable NoSQL database for data storage
-- 📝 **Comprehensive Logging**: Detailed logs for monitoring and debugging
-- ✅ **Data Validation**: Schema-based validation for data quality
-- 🚀 **Cloud Ready**: Deploy to AWS, Azure, or GCP
-- 🔐 **Security Best Practices**: Built with security in mind
+**Key Technologies:**
+- Python 3.8+
+- MongoDB (NoSQL Database)
+- Docker (Containerization)
+- GitHub Actions (CI/CD)
+- Machine Learning (Scikit-learn/TensorFlow)
 
 ---
 
-## 🏗️ Architecture
+## Features
+
+- **Data Ingestion**: Automated data collection from network sources and storage in MongoDB
+- **Data Validation**: Schema-based validation to ensure data quality
+- **Data Transformation**: Feature engineering and preprocessing pipeline
+- **Model Training**: Training ML models for anomaly detection
+- **Model Evaluation**: Performance metrics and model selection
+- **Logging**: Comprehensive logging for debugging and monitoring
+- **Docker Support**: Containerized application for easy deployment
+- **CI/CD Pipeline**: Automated workflows using GitHub Actions
+
+---
+
+## Project Structure
 
 ```
-┌─────────────────┐
-│  Network Data   │
-│   Collection    │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│   MongoDB       │
-│   Database      │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Data Validation│
-│   & Processing  │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  ML Pipeline    │
-│  (Training)     │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Final Model    │
-│  (Deployment)   │
-└────────┬────────┘
-         │
-         ▼
-┌─────────────────┐
-│  Prediction     │
-│  Service        │
-└─────────────────┘
+Network_Security/
+│
+├── networksecurity/              # Main application package
+│   ├── components/               # Core components
+│   │   ├── data_ingestion.py
+│   │   ├── data_validation.py
+│   │   ├── data_transformation.py
+│   │   └── model_trainer.py
+│   ├── entity/                   # Configuration entities
+│   │   ├── config_entity.py
+│   │   └── artifact_entity.py
+│   ├── pipeline/                 # Training pipeline
+│   │   └── training_pipeline.py
+│   ├── utils/                    # Utility functions
+│   └── constants/                # Application constants
+│
+├── Network_Data/                 # Network dataset storage
+├── Artifacts/                    # Training artifacts
+│   ├── data_ingestion/
+│   ├── data_validation/
+│   ├── data_transformation/
+│   └── model_trainer/
+│
+├── final_model/                  # Production-ready models
+├── data_schema/                  # Data validation schemas
+├── logs/                         # Application logs
+│
+├── .github/workflows/            # CI/CD configurations
+├── main.py                       # Application entry point
+├── push_data.py                  # Data ingestion script
+├── test_mongo_db.py             # MongoDB connection test
+├── setup.py                      # Package setup
+├── requirements.txt              # Python dependencies
+├── Dockerfile                    # Docker configuration
+└── .gitignore                    # Git ignore rules
 ```
 
 ---
 
-## 🔧 Prerequisites
+## Prerequisites
 
-Before you begin, ensure you have the following installed:
-
-- **Python**: 3.8 or higher
-- **MongoDB**: 4.0 or higher
-- **Docker**: 20.10 or higher (optional, for containerized deployment)
-- **Git**: For version control
-- **pip**: Python package manager
+- Python 3.8 or higher
+- MongoDB 4.0 or higher
+- Docker (optional, for containerized deployment)
+- pip (Python package manager)
 
 ---
 
-## 📥 Installation
+## Installation
 
 ### 1. Clone the Repository
 
@@ -116,10 +109,10 @@ cd Network_Security
 python -m venv venv
 
 # Activate virtual environment
-# On Windows:
+# Windows:
 venv\Scripts\activate
 
-# On macOS/Linux:
+# macOS/Linux:
 source venv/bin/activate
 ```
 
@@ -129,7 +122,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 4. Install the Package
+### 4. Install Package in Development Mode
 
 ```bash
 pip install -e .
@@ -137,11 +130,12 @@ pip install -e .
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
-### 1. MongoDB Setup
+### MongoDB Setup
 
-Create a `.env` file in the root directory:
+1. Install MongoDB on your system or use MongoDB Atlas (cloud)
+2. Create a `.env` file in the root directory:
 
 ```env
 MONGODB_URL=mongodb://localhost:27017
@@ -149,33 +143,44 @@ DATABASE_NAME=network_security
 COLLECTION_NAME=network_data
 ```
 
-### 2. Test MongoDB Connection
+### Test MongoDB Connection
 
 ```bash
 python test_mongo_db.py
 ```
 
-### 3. Configure Data Schema
-
-Review and modify the data schema in `data_schema/` directory to match your network data format.
+If the connection is successful, you should see a confirmation message.
 
 ---
 
-## 🚀 Usage
+## Usage
 
-### Push Data to MongoDB
+### 1. Push Data to MongoDB
+
+Load your network data into MongoDB:
 
 ```bash
 python push_data.py
 ```
 
-### Train the Model
+### 2. Train the Model
+
+Run the complete training pipeline:
 
 ```bash
 python main.py
 ```
 
-### Run with Docker
+This will execute:
+- Data ingestion from MongoDB
+- Data validation against schema
+- Data transformation and feature engineering
+- Model training and evaluation
+- Model artifact storage
+
+### 3. Run with Docker
+
+Build and run the application using Docker:
 
 ```bash
 # Build Docker image
@@ -185,215 +190,178 @@ docker build -t network-security:latest .
 docker run -p 8000:8000 network-security:latest
 ```
 
-### Run with Docker Compose (if available)
+---
 
-```bash
-docker-compose up -d
+## Components
+
+### 1. Data Ingestion (`data_ingestion.py`)
+
+- Connects to MongoDB database
+- Retrieves network traffic data
+- Splits data into training and testing sets
+- Stores data in the feature store
+
+**Output**: Raw data artifacts in `Artifacts/data_ingestion/`
+
+### 2. Data Validation (`data_validation.py`)
+
+- Validates data against predefined schema
+- Checks for missing values and data types
+- Detects data drift
+- Generates validation reports
+
+**Output**: Validation reports in `Artifacts/data_validation/`
+
+### 3. Data Transformation (`data_transformation.py`)
+
+- Handles missing values
+- Encodes categorical features
+- Scales numerical features
+- Creates feature engineering pipeline
+- Transforms data for model training
+
+**Output**: Preprocessed data and transformer objects in `Artifacts/data_transformation/`
+
+### 4. Model Training (`model_trainer.py`)
+
+- Trains multiple ML models
+- Performs hyperparameter tuning
+- Evaluates model performance
+- Selects the best performing model
+- Saves model artifacts
+
+**Output**: Trained models in `Artifacts/model_trainer/` and `final_model/`
+
+### 5. Training Pipeline (`training_pipeline.py`)
+
+Orchestrates the entire training workflow by executing all components in sequence:
+
+```
+Data Ingestion → Data Validation → Data Transformation → Model Training
 ```
 
 ---
 
-## 📁 Project Structure
+## Logging
+
+All operations are logged to the `logs/` directory with timestamps. Log files contain:
+- Component execution status
+- Error messages and stack traces
+- Data processing information
+- Model training metrics
+
+---
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions for automated workflows defined in `.github/workflows/`:
+
+- **Continuous Integration**: Automatic testing on code push
+- **Continuous Deployment**: Automated Docker image builds
+- **Code Quality Checks**: Linting and formatting validation
+
+---
+
+## Data Schema
+
+The `data_schema/` directory contains JSON schema definitions for:
+- Input data validation
+- Feature names and types
+- Expected data ranges
+- Missing value handling rules
+
+Ensure your network data conforms to the schema before training.
+
+---
+
+## Artifacts
+
+Training artifacts are stored in the `Artifacts/` directory with timestamp-based organization:
 
 ```
-Network_Security/
-│
-├── networksecurity/          # Main application package
-│   ├── components/           # Data ingestion, transformation, model trainer
-│   ├── entity/               # Configuration and artifact entities
-│   ├── pipeline/             # Training and prediction pipelines
-│   ├── utils/                # Utility functions
-│   └── constants/            # Application constants
-│
-├── Network_Data/             # Dataset storage
-├── Artifacts/                # Training artifacts and outputs
-├── final_model/              # Production-ready models
-├── data_schema/              # Data validation schemas
-├── logs/                     # Application logs
-│
-├── .github/workflows/        # CI/CD pipeline configurations
-│
-├── main.py                   # Main application entry point
-├── push_data.py              # Data ingestion script
-├── test_mongo_db.py          # Database connectivity test
-├── setup.py                  # Package setup configuration
-├── requirements.txt          # Python dependencies
-├── Dockerfile                # Docker configuration
-├── .gitignore               # Git ignore rules
-└── README.md                # This file
+Artifacts/
+├── <timestamp>/
+│   ├── data_ingestion/
+│   │   ├── feature_store/
+│   │   └── ingested/
+│   ├── data_validation/
+│   │   └── report/
+│   ├── data_transformation/
+│   │   └── transformed/
+│   └── model_trainer/
+│       └── model/
 ```
 
 ---
 
-## 🎓 Model Training
+## Model Files
 
-### Training Pipeline
-
-The training pipeline consists of several stages:
-
-1. **Data Ingestion**: Load data from MongoDB
-2. **Data Validation**: Validate against schema
-3. **Data Transformation**: Feature engineering and preprocessing
-4. **Model Training**: Train multiple ML models
-5. **Model Evaluation**: Evaluate and select best model
-6. **Model Export**: Save the final model
-
-### Training Command
-
-```bash
-python main.py --train
-```
-
-### Custom Training Configuration
-
-Modify training parameters in the configuration files or pass arguments:
-
-```bash
-python main.py --train --epochs 100 --batch_size 32
-```
+Final production-ready models are saved in:
+- `final_model/` - Best performing model
+- Includes model file, preprocessor, and metadata
 
 ---
 
-## 📚 API Documentation
+## Troubleshooting
 
-### Prediction Endpoint
+### MongoDB Connection Issues
 
-```http
-POST /predict
-Content-Type: application/json
-
-{
-  "features": [
-    "feature1_value",
-    "feature2_value",
-    ...
-  ]
-}
-```
-
-**Response:**
-
-```json
-{
-  "prediction": "normal|anomaly",
-  "confidence": 0.95,
-  "threat_type": "ddos|malware|normal",
-  "timestamp": "2026-01-08T12:00:00Z"
-}
-```
-
-### Health Check
-
-```http
-GET /health
-```
-
-**Response:**
-
-```json
-{
-  "status": "healthy",
-  "model_version": "v1.0",
-  "uptime": "24h"
-}
-```
-
----
-
-## 🧪 Testing
-
-### Run Unit Tests
-
-```bash
-pytest tests/
-```
-
-### Run Integration Tests
-
-```bash
-pytest tests/integration/
-```
-
-### Check Code Coverage
-
-```bash
-pytest --cov=networksecurity tests/
-```
-
----
-
-## 🤝 Contributing
-
-We welcome contributions! Here's how you can help:
-
-1. **Fork the repository**
-2. **Create a feature branch**: `git checkout -b feature/AmazingFeature`
-3. **Commit your changes**: `git commit -m 'Add some AmazingFeature'`
-4. **Push to the branch**: `git push origin feature/AmazingFeature`
-5. **Open a Pull Request**
-
-### Contribution Guidelines
-
-- Follow PEP 8 style guide
-- Write unit tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting PR
-
----
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**MongoDB Connection Error**
 ```bash
 # Check if MongoDB is running
 sudo systemctl status mongod
 
-# Start MongoDB
+# Start MongoDB service
 sudo systemctl start mongod
 ```
 
-**Module Import Errors**
+### Import Errors
+
 ```bash
-# Reinstall the package in development mode
+# Reinstall the package
 pip install -e .
 ```
 
+### Docker Issues
+
+```bash
+# Check Docker status
+docker --version
+
+# View running containers
+docker ps
+
+# View logs
+docker logs <container_id>
+```
 
 ---
 
-## 📊 Performance Metrics
+## Contributing
 
-Current model performance (example metrics):
+Contributions are welcome! Please follow these steps:
 
-| Metric | Value |
-|--------|-------|
-| Accuracy | 95.5% |
-| Precision | 94.2% |
-| Recall | 96.1% |
-| F1-Score | 95.1% |
-| Inference Time | <50ms |
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/YourFeature`)
+3. Commit your changes (`git commit -m 'Add YourFeature'`)
+4. Push to the branch (`git push origin feature/YourFeature`)
+5. Open a Pull Request
 
----
+### Code Style
 
-## 🔐 Security
-
-- Never commit sensitive credentials to the repository
-- Use environment variables for configuration
-- Keep dependencies updated regularly
-- Follow security best practices for production deployment
-- Enable encryption for data in transit and at rest
+- Follow PEP 8 guidelines
+- Add docstrings to functions and classes
+- Write unit tests for new features
+- Update documentation as needed
 
 ---
 
-## 📝 License
+## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is open source. Please check the repository for license information.
 
 ---
 
-## 👥 Authors
+## Author
 
 **Adarsh Kumar**
 - GitHub: [@Adarsh2004ku](https://github.com/Adarsh2004ku)
@@ -401,45 +369,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Thanks to all contributors who have helped shape this project
-- Inspired by modern MLOps practices and network security research
-- Built with open-source tools and libraries
-
----
-
-## 📞 Contact & Support
-
-- **Issues**: [GitHub Issues](https://github.com/Adarsh2004ku/Network_Security/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Adarsh2004ku/Network_Security/discussions)
-- **Email**: Create an issue for support
-
----
-
-## 🗺️ Roadmap
-
-### Current Version (v1.0)
-- ✅ Basic anomaly detection
-- ✅ MongoDB integration
-- ✅ Docker support
-- ✅ CI/CD pipeline
-
-### Upcoming Features (v2.0)
-- 🔄 Real-time streaming support
-- 📊 Interactive dashboard
-- 🔔 Alert notification system
-- 🌐 REST API with FastAPI
-- 📈 Advanced visualization tools
-- 🧠 Deep learning models
-- 🔗 SIEM integration
-
----
-
-## ⭐ Star History
-
-If you find this project useful, please consider giving it a star! ⭐
-
----
-
-**Made with ❤️ by Adarsh Kumar**
+- Built with modern MLOps practices
+- Uses industry-standard tools and libraries
+- Inspired by network security research and best practices
