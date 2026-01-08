@@ -23,7 +23,7 @@ from sklearn.ensemble import (
     GradientBoostingClassifier,
     RandomForestClassifier,
 )
-
+import mlflow
 
 
 class ModelTrainer:
@@ -35,6 +35,15 @@ class ModelTrainer:
         except Exception as e:
             raise NetworkSecurityException(e,sys)
         
+
+
+    def track_mlflow(self,best_model,classification_train_metric):
+        with mlflow.start_run():
+
+            mlflow.log_metric("train_f1_score",classification_train_metric.f1_score)
+            mlflow.log_metric("train_precision_score",classification_train_metric.precision_score)
+            mlflow.log_metric("train_recall_score",classification_train_metric.recall_score)
+            mlflow.sklearn.log_model(best_model,"model")
 
     def train_model(self,X_train,y_train,X_test,y_test):
         try:
@@ -54,14 +63,14 @@ class ModelTrainer:
                 "Random Forest":{
                     # 'criterion':['gini', 'entropy', 'log_loss'],
                     
-                    # 'max_features':['sqrt','log2',None],
+                    'max_features':['sqrt','log2',None],
                     'n_estimators': [8,16,32,128,256]
                 },
                 "Gradient Boosting":{
                     # 'loss':['log_loss', 'exponential'],
                     'learning_rate':[.1,.01,.05,.001],
                     'subsample':[0.6,0.7,0.75,0.85,0.9],
-                    # 'criterion':['squared_error', 'friedman_mse'],
+                    'criterion':['squared_error', 'friedman_mse'],
                     # 'max_features':['auto','sqrt','log2'],
                     'n_estimators': [8,16,32,64,128,256]
                 },
@@ -90,6 +99,12 @@ class ModelTrainer:
 
             classification_train_metric=get_classification_score(y_true=y_train,y_pred=y_train_pred)
             classification_test_metric=get_classification_score(y_true=y_test,y_pred=y_test_pred)
+
+            # Track Mlflow experiment
+            self.track_mlflow(best_model,classification_train_metric)
+            self.track_mlflow(best_model,classification_test_metric)
+
+
             
             # Load preprocessor
             preprocessor = load_object(self.data_transformation_artifact.transformed_object_file_path)

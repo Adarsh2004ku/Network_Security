@@ -1,0 +1,27 @@
+[ 2026-01-08 22:27:21,236 ] 22 networksecurity - INFO - Initiate the data Ingestion
+[ 2026-01-08 22:27:31,217 ] 62 root - INFO - Performed train test split on the dataframe
+[ 2026-01-08 22:27:31,217 ] 64 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[ 2026-01-08 22:27:31,217 ] 72 root - INFO - Exporting train and test file path.
+[ 2026-01-08 22:27:31,249 ] 81 root - INFO - Exported train and test file path.
+[ 2026-01-08 22:27:31,249 ] 24 networksecurity - INFO - Completed the data Ingestion
+[ 2026-01-08 22:27:31,251 ] 29 networksecurity - INFO - Initiate the data Validation
+[ 2026-01-08 22:27:31,261 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-08 22:27:31,261 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-08 22:27:31,261 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-08 22:27:31,261 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-08 22:27:31,352 ] 31 networksecurity - INFO - Completed the data Validation
+[ 2026-01-08 22:27:31,353 ] 35 networksecurity - INFO - data Transformation started
+[ 2026-01-08 22:27:31,353 ] 63 root - INFO - Entered initiate_data_transformation method of DataTransformation class
+[ 2026-01-08 22:27:31,353 ] 65 root - INFO - Starting data transformation
+[ 2026-01-08 22:27:31,362 ] 48 root - INFO - Entered get_data_trnasformer_object method of Trnasformation class
+[ 2026-01-08 22:27:31,362 ] 53 root - INFO - Initialise KNNImputer with {'missing_values': nan, 'n_neighbors': 3, 'weights': 'uniform'}
+[ 2026-01-08 22:27:31,366 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-08 22:27:31,368 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-08 22:27:31,368 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-08 22:27:31,371 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-08 22:27:31,371 ] 39 networksecurity - INFO - data Transformation completed
+[ 2026-01-08 22:27:31,372 ] 42 networksecurity - INFO - Model Training started
+[ 2026-01-08 22:29:20,676 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-08 22:29:20,678 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-08 22:29:20,679 ] 110 root - INFO - Model Trainer Artifact: ModelTrainerArtifact(trained_model_file_path='Artifacts/27_01/08/26_2026_22_27_19/model_trainer/trained_model/model.pkl', train_metric_artifact=ClassificationMetricArtifact(f1_score=0.9904493817231326, precision_score=0.9897528631705846, recall_score=0.9911468812877263), test_metric_artifact=ClassificationMetricArtifact(f1_score=0.9752412924884599, precision_score=0.9715719063545151, recall_score=0.97893850042123)) 
+[ 2026-01-08 22:29:20,679 ] 47 networksecurity - INFO - Model Training artifact created

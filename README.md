@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Network Security
 
 A machine learning-based network security system for detecting anomalies and threats in network traffic data. This project implements a complete MLOps pipeline from data ingestion to model deployment using MongoDB for data storage and Docker for containerization.
@@ -374,3 +375,5 @@ This project is open source. Please check the repository for license information
 - Built with modern MLOps practices
 - Uses industry-standard tools and libraries
 - Inspired by network security research and best practices
+=======
+>>>>>>> fab2362 (mlflow integrated)
