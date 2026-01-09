@@ -356,16 +356,6 @@ Contributions are welcome! Please follow these steps:
 
 ---
 
-## License
-
-This project is open source. Please check the repository for license information.
-
----
-
-## Author
-
-**Adarsh Kumar**
-- GitHub: [@Adarsh2004ku](https://github.com/Adarsh2004ku)
 - Repository: [Network_Security](https://github.com/Adarsh2004ku/Network_Security)
 
 ---
