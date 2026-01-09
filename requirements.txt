@@ -10,4 +10,7 @@ dill
 PyYAML
 mlflow
 dagshub
+fastapi
+uvicorn
+python-multipart
 ##-e .

@@ -1,0 +1,18 @@
+[ 2026-01-10 01:20:37,178 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2026-01-10 01:20:37,181 ] 107 dagshub - INFO - Accessing as Adarsh2004ku
+[ 2026-01-10 01:20:38,084 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/repos/Adarsh2004ku/Network_Security "HTTP/1.1 200 OK"
+[ 2026-01-10 01:20:38,951 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2026-01-10 01:20:38,952 ] 107 dagshub - INFO - Initialized MLflow to track repo "Adarsh2004ku/Network_Security"
+[ 2026-01-10 01:20:38,953 ] 107 dagshub - INFO - Repository Adarsh2004ku/Network_Security initialized!
+[ 2026-01-10 01:20:39,063 ] 35 networksecurity - INFO - Start data Ingestion
+[ 2026-01-10 01:20:45,308 ] 62 root - INFO - Performed train test split on the dataframe
+[ 2026-01-10 01:20:45,308 ] 64 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[ 2026-01-10 01:20:45,308 ] 72 root - INFO - Exporting train and test file path.
+[ 2026-01-10 01:20:45,341 ] 81 root - INFO - Exported train and test file path.
+[ 2026-01-10 01:20:45,341 ] 38 networksecurity - INFO - Data Ingestion completed and artifact: DataIngestionArtifact(trained_file_path='Artifacts/20_01/10/26_2026_01_20_34/data_ingestion/ingested/train.csv', test_file_path='Artifacts/20_01/10/26_2026_01_20_34/data_ingestion/ingested/test.csv')
+[ 2026-01-10 01:20:45,344 ] 47 networksecurity - INFO - Initiate the data Validation
+[ 2026-01-10 01:20:45,354 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-10 01:20:45,354 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-10 01:20:45,354 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-10 01:20:45,354 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-10 01:20:45,442 ] 49 networksecurity - INFO - Completed the data Validation

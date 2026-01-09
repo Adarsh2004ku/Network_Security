@@ -1,0 +1,32 @@
+[ 2026-01-10 01:41:25,827 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2026-01-10 01:41:25,829 ] 107 dagshub - INFO - Accessing as Adarsh2004ku
+[ 2026-01-10 01:41:26,755 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/repos/Adarsh2004ku/Network_Security "HTTP/1.1 200 OK"
+[ 2026-01-10 01:41:27,597 ] 1025 httpx - INFO - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[ 2026-01-10 01:41:27,597 ] 107 dagshub - INFO - Initialized MLflow to track repo "Adarsh2004ku/Network_Security"
+[ 2026-01-10 01:41:27,598 ] 107 dagshub - INFO - Repository Adarsh2004ku/Network_Security initialized!
+[ 2026-01-10 01:41:29,906 ] 34 root - INFO - Start data Ingestion
+[ 2026-01-10 01:41:35,903 ] 62 root - INFO - Performed train test split on the dataframe
+[ 2026-01-10 01:41:35,903 ] 64 root - INFO - Exited split_data_as_train_test method of Data_Ingestion class
+[ 2026-01-10 01:41:35,903 ] 72 root - INFO - Exporting train and test file path.
+[ 2026-01-10 01:41:35,935 ] 81 root - INFO - Exported train and test file path.
+[ 2026-01-10 01:41:35,935 ] 37 root - INFO - Data Ingestion completed and artifact: DataIngestionArtifact(trained_file_path='Artifacts/41_01/10/26_2026_01_41_23/data_ingestion/ingested/train.csv', test_file_path='Artifacts/41_01/10/26_2026_01_41_23/data_ingestion/ingested/test.csv')
+[ 2026-01-10 01:41:35,938 ] 50 root - INFO - Initiate the data Validation
+[ 2026-01-10 01:41:35,947 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-10 01:41:35,947 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-10 01:41:35,947 ] 34 root - INFO - Required number of columns:2
+[ 2026-01-10 01:41:35,947 ] 35 root - INFO - Data frame has columns:31
+[ 2026-01-10 01:41:36,033 ] 52 root - INFO - Completed the data Validation
+[ 2026-01-10 01:41:36,033 ] 62 root - INFO - Starting Data Transformation
+[ 2026-01-10 01:41:36,033 ] 63 root - INFO - Entered initiate_data_transformation method of DataTransformation class
+[ 2026-01-10 01:41:36,033 ] 65 root - INFO - Starting data transformation
+[ 2026-01-10 01:41:36,043 ] 48 root - INFO - Entered get_data_trnasformer_object method of Trnasformation class
+[ 2026-01-10 01:41:36,043 ] 53 root - INFO - Initialise KNNImputer with {'missing_values': nan, 'n_neighbors': 3, 'weights': 'uniform'}
+[ 2026-01-10 01:41:36,047 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-10 01:41:36,051 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-10 01:41:36,051 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-10 01:41:36,053 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-10 01:41:36,053 ] 77 root - INFO - Data Transformation completed
+[ 2026-01-10 01:42:41,295 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-10 01:42:41,334 ] 50 root - INFO - Exited the save_object method of MainUtils class
+[ 2026-01-10 01:42:41,334 ] 46 root - INFO - Entered the save_object method of MainUtils class
+[ 2026-01-10 01:42:41,358 ] 50 root - INFO - Exited the save_object method of MainUtils class
