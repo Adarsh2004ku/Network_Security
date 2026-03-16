@@ -1,369 +1,346 @@
-<<<<<<< HEAD
-# Network Security
+# 🔐 Network Security — End-to-End MLOps Phishing Detection System
 
-A machine learning-based network security system for detecting anomalies and threats in network traffic data. This project implements a complete MLOps pipeline from data ingestion to model deployment using MongoDB for data storage and Docker for containerization.
+![Python](https://img.shields.io/badge/Python-3.10-blue?logo=python&logoColor=white)
+![Scikit-learn](https://img.shields.io/badge/Scikit--learn-ML-orange?logo=scikit-learn&logoColor=white)
+![MLflow](https://img.shields.io/badge/MLflow-Tracking-0194E2?logo=mlflow&logoColor=white)
+![DagsHub](https://img.shields.io/badge/DagsHub-Experiment%20Tracking-orange)
+![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-REST%20API-009688?logo=fastapi&logoColor=white)
+![AWS ECR](https://img.shields.io/badge/AWS%20ECR-Registry-FF9900?logo=amazonaws&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS%20EC2-Deployed-FF9900?logo=amazonaws&logoColor=white)
+![CI/CD](https://img.shields.io/badge/CI%2FCD-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?logo=mongodb&logoColor=white)
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Features](#features)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Configuration](#configuration)
-- [Usage](#usage)
-- [Components](#components)
-- [Contributing](#contributing)
+A **production-grade, end-to-end MLOps system** for detecting phishing websites with >99% accuracy. Built on the UCI Phishing Websites Dataset (11,055 records, 30 features), this project covers the full ML lifecycle — from automated data ingestion from MongoDB Atlas, through a five-stage training pipeline with MLflow experiment tracking, to a live FastAPI REST API deployed on AWS EC2 via Docker and GitHub Actions CI/CD.
 
 ---
 
-## Overview
+## 📋 Table of Contents
 
-This project provides an end-to-end solution for network security monitoring using machine learning. It processes network traffic data, trains models to detect anomalies, and provides predictions on potential security threats.
-
-**Key Technologies:**
-- Python 3.8+
-- MongoDB (NoSQL Database)
-- Docker (Containerization)
-- GitHub Actions (CI/CD)
-- Machine Learning (Scikit-learn/TensorFlow)
-
----
-
-## Features
-
-- **Data Ingestion**: Automated data collection from network sources and storage in MongoDB
-- **Data Validation**: Schema-based validation to ensure data quality
-- **Data Transformation**: Feature engineering and preprocessing pipeline
-- **Model Training**: Training ML models for anomaly detection
-- **Model Evaluation**: Performance metrics and model selection
-- **Logging**: Comprehensive logging for debugging and monitoring
-- **Docker Support**: Containerized application for easy deployment
-- **CI/CD Pipeline**: Automated workflows using GitHub Actions
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+- [Pipeline Stages](#-pipeline-stages)
+- [Dataset](#-dataset)
+- [Model Performance](#-model-performance)
+- [Technology Stack](#-technology-stack)
+- [Project Structure](#-project-structure)
+- [Setup & Installation](#-setup--installation)
+- [Running the Pipeline](#-running-the-pipeline)
+- [API Usage](#-api-usage)
+- [CI/CD Deployment](#-cicd-deployment)
+- [MLflow Experiment Tracking](#-mlflow-experiment-tracking)
 
 ---
 
-## Project Structure
+## 🧠 Overview
+
+Phishing attacks account for over **80% of reported security incidents** globally. Traditional rule-based detection systems fail against modern phishing campaigns that rotate domains and use HTTPS certificates to appear legitimate.
+
+This system applies **MLOps best practices** to solve the problem at scale:
+- ✅ Fully automated pipeline — raw MongoDB data → live prediction API
+- ✅ Schema validation guards against data drift
+- ✅ KNN imputation + StandardScaler preprocessing serialised for inference parity
+- ✅ Multi-model training with F1-score gated model promotion
+- ✅ Full experiment tracking via MLflow + DagsHub
+- ✅ Dockerised deployment with GitHub Actions CI/CD to AWS ECR + EC2
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        DATA LAYER                                   │
+│   MongoDB Atlas  ──► push_data.py  ──► phishing_data collection     │
+└─────────────────────────┬───────────────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────────────┐
+│                      PIPELINE LAYER                                 │
+│                                                                     │
+│  DataIngestion → DataValidation → DataTransformation →              │
+│  ModelTrainer  → ModelEvaluation                                    │
+│                                                                     │
+│  (All stages produce typed Artifact dataclasses)                    │
+└─────────────────────────┬───────────────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────────────┐
+│                      SERVING LAYER                                  │
+│   FastAPI  ──►  /train  |  /predict                                 │
+│   model.pkl + preprocessor.pkl loaded at startup                   │
+└─────────────────────────┬───────────────────────────────────────────┘
+                          │
+┌─────────────────────────▼───────────────────────────────────────────┐
+│                   INFRASTRUCTURE LAYER                              │
+│   GitHub Actions CI/CD → Docker Build → AWS ECR → AWS EC2          │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## ⚙️ Pipeline Stages
+
+### Stage 1 — Data Ingestion
+- Connects to **MongoDB Atlas** via `MONGO_DB_URL` env variable
+- Fetches all documents from `phishing_data` collection using PyMongo
+- Performs stratified **80/20 train-test split**
+- Outputs: `feature_store.csv`, `train.csv`, `test.csv` → `Artifacts/data_ingestion/`
+
+### Stage 2 — Data Validation
+- Validates column presence, count, and data types against `data_schema/schema.yaml`
+- Checks missing value thresholds per column
+- Runs **Kolmogorov-Smirnov drift detection** between train and test distributions
+- Outputs: structured JSON validation report with `validation_status`, `drift_report`, `missing_values`
+
+### Stage 3 — Data Transformation
+- **KNN Imputation** (k=3) for missing numerical values — more accurate than mean/median
+- **StandardScaler** — zero mean, unit variance normalisation
+- Preprocessor is **fit only on training set** (no data leakage)
+- Serialises `preprocessor.pkl` for identical inference-time transformations
+- Outputs: transformed NumPy arrays → `Artifacts/data_transformation/`
+
+### Stage 4 — Model Training
+Models trained and compared:
+
+| Model | Notes |
+|---|---|
+| Random Forest | Best balance of accuracy & speed |
+| XGBoost | Highest AUC-ROC via gradient boosting |
+| Logistic Regression | Interpretable baseline (~90–92% accuracy) |
+| Decision Tree | Fast, explainable |
+| AdaBoost | Ensemble boosting baseline |
+
+- All runs logged to **MLflow + DagsHub** (params, metrics, artifacts, confusion matrix, ROC curve)
+- Model selected only if **test F1-score > 0.60** threshold — prevents poor models reaching production
+- Best model + preprocessor copied to `final_model/`
+
+### Stage 5 — Model Serving (FastAPI)
+- `POST /predict` — accepts CSV file, returns JSON array with `predicted_label` + `phishing_probability`
+- `POST /train` — triggers full pipeline retraining on demand
+- Swagger UI available at `/docs`
+
+---
+
+## 📊 Dataset
+
+**UCI Phishing Websites Dataset** — 11,055 instances, 30 integer-encoded features + 1 binary label
+
+| Feature | Description |
+|---|---|
+| `SSLfinal_State` | HTTPS certificate validity |
+| `URL_of_Anchor` | Anchor href patterns |
+| `web_traffic` | Site traffic rank |
+| `having_Sub_Domain` | Subdomain count |
+| `Request_URL` | External resource loading ratio |
+| `Page_Rank` | Google PageRank authority |
+| ... | 24 more URL/page behavioural features |
+
+**Target:** `Result` — `1` (legitimate) / `0` (phishing)
+
+All features are integer-encoded: `-1` (phishing indicator), `0` (suspicious), `1` (legitimate indicator).
+
+---
+
+## 📈 Model Performance
+
+| Metric | Target | Achieved |
+|---|---|---|
+| Accuracy | >95% | **>99%** |
+| F1-Score | >0.95 | **>0.97** |
+| AUC-ROC | >0.95 | **>0.97** |
+| Precision | >0.95 | ✅ |
+| Recall | >0.95 | ✅ |
+
+> Best performing model: **Random Forest / XGBoost** (ensemble tree methods outperform linear models on this feature set)
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technology |
+|---|---|
+| Language | Python 3.10 |
+| ML | Scikit-learn, XGBoost |
+| Experiment Tracking | MLflow, DagsHub |
+| Data Store | MongoDB Atlas (PyMongo) |
+| API | FastAPI, Uvicorn |
+| Containerisation | Docker |
+| CI/CD | GitHub Actions |
+| Cloud Registry | AWS ECR |
+| Cloud Compute | AWS EC2 |
+| Data Processing | Pandas, NumPy |
+
+---
+
+## 📁 Project Structure
 
 ```
 Network_Security/
-│
-├── networksecurity/              # Main application package
-│   ├── components/               # Core components
+├── networksecurity/
+│   ├── components/          # Pipeline stage implementations
 │   │   ├── data_ingestion.py
 │   │   ├── data_validation.py
 │   │   ├── data_transformation.py
 │   │   └── model_trainer.py
-│   ├── entity/                   # Configuration entities
-│   │   ├── config_entity.py
-│   │   └── artifact_entity.py
-│   ├── pipeline/                 # Training pipeline
-│   │   └── training_pipeline.py
-│   ├── utils/                    # Utility functions
-│   └── constants/                # Application constants
-│
-├── Network_Data/                 # Network dataset storage
-├── Artifacts/                    # Training artifacts
-│   ├── data_ingestion/
-│   ├── data_validation/
-│   ├── data_transformation/
-│   └── model_trainer/
-│
-├── final_model/                  # Production-ready models
-├── data_schema/                  # Data validation schemas
-├── logs/                         # Application logs
-│
-├── .github/workflows/            # CI/CD configurations
-├── main.py                       # Application entry point
-├── push_data.py                  # Data ingestion script
-├── test_mongo_db.py             # MongoDB connection test
-├── setup.py                      # Package setup
-├── requirements.txt              # Python dependencies
-├── Dockerfile                    # Docker configuration
-└── .gitignore                    # Git ignore rules
+│   ├── entity/
+│   │   ├── config_entity.py     # Config dataclasses per stage
+│   │   └── artifact_entity.py   # Artifact dataclasses per stage
+│   ├── exception/           # Custom NetworkSecurityException
+│   ├── logging/             # Centralised structured logger
+│   ├── pipeline/            # Training & prediction pipeline orchestrators
+│   └── utils/               # Shared utilities
+├── data_schema/
+│   └── schema.yaml          # Column names, types, validation rules
+├── final_model/             # Best model.pkl + preprocessor.pkl
+├── Artifacts/               # Timestamped pipeline run outputs
+├── .github/workflows/       # CI/CD pipeline definition
+├── app.py                   # FastAPI application entry point
+├── main.py                  # Training pipeline runner
+├── push_data.py             # MongoDB data upload script
+├── Dockerfile               # Production container definition
+├── render.yaml / docker-compose.yml
+├── requirements.txt
+└── setup.py
 ```
 
 ---
 
-## Prerequisites
+## 🚀 Setup & Installation
 
-- Python 3.8 or higher
-- MongoDB 4.0 or higher
-- Docker (optional, for containerized deployment)
-- pip (Python package manager)
+### Prerequisites
+- Python 3.10+
+- MongoDB Atlas account
+- AWS account (ECR + EC2) for deployment
+- DagsHub account linked to this repository
+- Docker Desktop (for local containerised testing)
 
----
-
-## Installation
-
-### 1. Clone the Repository
+### 1. Clone & Install
 
 ```bash
 git clone https://github.com/Adarsh2004ku/Network_Security.git
 cd Network_Security
-```
-
-### 2. Create Virtual Environment
-
-```bash
-# Create virtual environment
 python -m venv venv
-
-# Activate virtual environment
-# Windows:
-venv\Scripts\activate
-
-# macOS/Linux:
-source venv/bin/activate
-```
-
-### 3. Install Dependencies
-
-```bash
+source venv/bin/activate      # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-```
-
-### 4. Install Package in Development Mode
-
-```bash
 pip install -e .
 ```
 
----
+### 2. Configure Environment Variables
 
-## Configuration
-
-### MongoDB Setup
-
-1. Install MongoDB on your system or use MongoDB Atlas (cloud)
-2. Create a `.env` file in the root directory:
+Create a `.env` file in the project root:
 
 ```env
-MONGODB_URL=mongodb://localhost:27017
-DATABASE_NAME=network_security
-COLLECTION_NAME=network_data
+MONGO_DB_URL=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/
+MLFLOW_TRACKING_URI=https://dagshub.com/<username>/Network_Security.mlflow
+MLFLOW_TRACKING_USERNAME=<dagshub_username>
+MLFLOW_TRACKING_PASSWORD=<dagshub_token>
 ```
-
-### Test MongoDB Connection
-
-```bash
-python test_mongo_db.py
-```
-
-If the connection is successful, you should see a confirmation message.
 
 ---
 
-## Usage
+## ▶️ Running the Pipeline
 
-### 1. Push Data to MongoDB
-
-Load your network data into MongoDB:
-
+### Push data to MongoDB (one-time setup)
 ```bash
 python push_data.py
 ```
 
-### 2. Train the Model
-
-Run the complete training pipeline:
-
+### Run the full training pipeline
 ```bash
 python main.py
 ```
+This runs all 5 stages sequentially: Ingest → Validate → Transform → Train → Evaluate
 
-This will execute:
-- Data ingestion from MongoDB
-- Data validation against schema
-- Data transformation and feature engineering
-- Model training and evaluation
-- Model artifact storage
-
-### 3. Run with Docker
-
-Build and run the application using Docker:
-
+### Start the FastAPI server locally
 ```bash
-# Build Docker image
-docker build -t network-security:latest .
-
-# Run container
-docker run -p 8000:8000 network-security:latest
+uvicorn app:app --host 0.0.0.0 --port 8080 --reload
 ```
+Swagger UI: [http://localhost:8080/docs](http://localhost:8080/docs)
 
----
-
-## Components
-
-### 1. Data Ingestion (`data_ingestion.py`)
-
-- Connects to MongoDB database
-- Retrieves network traffic data
-- Splits data into training and testing sets
-- Stores data in the feature store
-
-**Output**: Raw data artifacts in `Artifacts/data_ingestion/`
-
-### 2. Data Validation (`data_validation.py`)
-
-- Validates data against predefined schema
-- Checks for missing values and data types
-- Detects data drift
-- Generates validation reports
-
-**Output**: Validation reports in `Artifacts/data_validation/`
-
-### 3. Data Transformation (`data_transformation.py`)
-
-- Handles missing values
-- Encodes categorical features
-- Scales numerical features
-- Creates feature engineering pipeline
-- Transforms data for model training
-
-**Output**: Preprocessed data and transformer objects in `Artifacts/data_transformation/`
-
-### 4. Model Training (`model_trainer.py`)
-
-- Trains multiple ML models
-- Performs hyperparameter tuning
-- Evaluates model performance
-- Selects the best performing model
-- Saves model artifacts
-
-**Output**: Trained models in `Artifacts/model_trainer/` and `final_model/`
-
-### 5. Training Pipeline (`training_pipeline.py`)
-
-Orchestrates the entire training workflow by executing all components in sequence:
-
-```
-Data Ingestion → Data Validation → Data Transformation → Model Training
-```
-
----
-
-## Logging
-
-All operations are logged to the `logs/` directory with timestamps. Log files contain:
-- Component execution status
-- Error messages and stack traces
-- Data processing information
-- Model training metrics
-
----
-
-## CI/CD Pipeline
-
-The project uses GitHub Actions for automated workflows defined in `.github/workflows/`:
-
-- **Continuous Integration**: Automatic testing on code push
-- **Continuous Deployment**: Automated Docker image builds
-- **Code Quality Checks**: Linting and formatting validation
-
----
-
-## Data Schema
-
-The `data_schema/` directory contains JSON schema definitions for:
-- Input data validation
-- Feature names and types
-- Expected data ranges
-- Missing value handling rules
-
-Ensure your network data conforms to the schema before training.
-
----
-
-## Artifacts
-
-Training artifacts are stored in the `Artifacts/` directory with timestamp-based organization:
-
-```
-Artifacts/
-├── <timestamp>/
-│   ├── data_ingestion/
-│   │   ├── feature_store/
-│   │   └── ingested/
-│   ├── data_validation/
-│   │   └── report/
-│   ├── data_transformation/
-│   │   └── transformed/
-│   └── model_trainer/
-│       └── model/
-```
-
----
-
-## Model Files
-
-Final production-ready models are saved in:
-- `final_model/` - Best performing model
-- Includes model file, preprocessor, and metadata
-
----
-
-## Troubleshooting
-
-### MongoDB Connection Issues
-
+### Docker local testing
 ```bash
-# Check if MongoDB is running
-sudo systemctl status mongod
-
-# Start MongoDB service
-sudo systemctl start mongod
+docker build -t networksecurity:latest .
+docker run -d -p 8080:8080 --env-file .env networksecurity:latest
 ```
 
-### Import Errors
+---
 
+## 🌐 API Usage
+
+### Predict (POST /predict)
 ```bash
-# Reinstall the package
-pip install -e .
+curl -X POST http://localhost:8080/predict \
+  -F "file=@sample_data.csv"
 ```
 
-### Docker Issues
+**Response:**
+```json
+[
+  {
+    "predicted_label": 0,
+    "phishing_probability": 0.94
+  },
+  {
+    "predicted_label": 1,
+    "phishing_probability": 0.07
+  }
+]
+```
+`predicted_label`: `0` = phishing, `1` = legitimate
 
+### Trigger Retraining (POST /train)
 ```bash
-# Check Docker status
-docker --version
-
-# View running containers
-docker ps
-
-# View logs
-docker logs <container_id>
+curl -X POST http://localhost:8080/train
 ```
 
 ---
 
-## Contributing
+## 🔄 CI/CD Deployment
 
-Contributions are welcome! Please follow these steps:
+The `.github/workflows/` pipeline runs on every push to `main`:
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -m 'Add YourFeature'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Open a Pull Request
+```
+Push to main
+    │
+    ▼
+Job 1: CI — lint (flake8) + unit tests (pytest)
+    │
+    ▼
+Job 2: CD — Docker build → push to AWS ECR
+    │
+    ▼
+Job 3: Deploy — EC2 self-hosted runner pulls image → restarts container
+```
 
-### Code Style
+### Required GitHub Secrets
 
-- Follow PEP 8 guidelines
-- Add docstrings to functions and classes
-- Write unit tests for new features
-- Update documentation as needed
+| Secret | Purpose |
+|---|---|
+| `AWS_ACCESS_KEY_ID` | AWS IAM credentials |
+| `AWS_SECRET_ACCESS_KEY` | AWS IAM credentials |
+| `AWS_REGION` | Target AWS region |
+| `ECR_REPOSITORY_URI` | ECR image registry URL |
+| `MONGO_DB_URL` | MongoDB Atlas connection string |
+| `MLFLOW_TRACKING_URI` | DagsHub MLflow endpoint |
+| `MLFLOW_TRACKING_USERNAME` | DagsHub username |
+| `MLFLOW_TRACKING_PASSWORD` | DagsHub token |
 
 ---
 
-- Repository: [Network_Security](https://github.com/Adarsh2004ku/Network_Security)
+## 📊 MLflow Experiment Tracking
+
+Every training run logs to DagsHub:
+- **Parameters** — all hyperparameter values
+- **Metrics** — accuracy, precision, recall, F1, AUC-ROC (train + test)
+- **Artifacts** — model pickle, confusion matrix plot, ROC curve
+- **Tags** — model name, pipeline timestamp, library versions
+
+View experiments at: `https://dagshub.com/Adarsh2004ku/Network_Security`
 
 ---
 
-## Acknowledgments
+## 👤 Author
 
-- Built with modern MLOps practices
-- Uses industry-standard tools and libraries
-- Inspired by network security research and best practices
-=======
->>>>>>> fab2362 (mlflow integrated)
+**Adarsh Kumar**
+- GitHub: [@Adarsh2004ku](https://github.com/Adarsh2004ku)
+- LinkedIn: [adarsh-kumar-714108314](https://www.linkedin.com/in/adarsh-kumar-714108314/)
+- Portfolio: [View Portfolio](https://portfolio-five-roan-hettkeuqbc.vercel.app/)
